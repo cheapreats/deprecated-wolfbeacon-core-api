@@ -3,3 +3,4 @@
 node_modules
 /routes/animal-routes.js
 /models/animal-model.js
+.idea
