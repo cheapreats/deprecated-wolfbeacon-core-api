@@ -1,7 +1,6 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
 
-var userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     _id: {type: String, required: true},
     organising: [String],
     volunteering: [String],
@@ -9,4 +8,4 @@ var userSchema = new Schema({
     mentoring: [String]
 });
 
-module.exports = mongoose.model('User',userSchema);
+export default mongoose.model('User',userSchema);

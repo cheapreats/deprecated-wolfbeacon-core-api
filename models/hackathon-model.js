@@ -1,7 +1,6 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
 
-var hackathonSchema = new Schema({
+const hackathonSchema = new mongoose.Schema({
     _id: {type: Number, required: true},
     uuid: {type: String, required: true},
     Data: {type: Object, required: true},
@@ -11,4 +10,5 @@ var hackathonSchema = new Schema({
     mentors: [String]
 });
 
-module.exports = mongoose.model('Hackathon', hackathonSchema);
+
+export default mongoose.model('Hackathon', hackathonSchema);

@@ -2,16 +2,17 @@
  * Module dependencies
  */
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var env = require('node-env-file');
-var jwt = require('express-jwt');
-var jwks = require('jwks-rsa');
+import express from 'express';
+import favicon from 'serve-favicon';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import env from 'node-env-file';
+import jwt from 'express-jwt';
+import jwks from 'jwks-rsa';
 
-var app = express();
+import routes from './routes/index'
+
+const app = express();
 
 env(__dirname + '/.env');
 
@@ -19,8 +20,8 @@ env(__dirname + '/.env');
  * Connect to MongoDB
  */
 
-var connectToDatabase = function () {
-    var options = {
+const connectToDatabase = function () {
+    const options = {
         // user: process.env.MONGODB_USERNAME,
         // pass: process.env.MONGODB_PASSWORD,
         server: {socketOptions: {keepAlive: 1}}
@@ -30,17 +31,17 @@ var connectToDatabase = function () {
 connectToDatabase();
 
 // When successfully connected
-mongoose.connection.on('connected', function () {
-    console.log('Mongoose default connection open to ' + process.env.MONGODB_URI);
-});
+mongoose.connection.on('connected', () =>
+    console.log('Mongoose default connection open to ' + process.env.MONGODB_URI)
+);
 
 // If the connection throws an error
-mongoose.connection.on('error', function (err) {
+mongoose.connection.on('error', (err) => {
     console.log('Mongoose default connection error: ' + err);
 });
 
 // When the connection is disconnected
-mongoose.connection.on('disconnected', function () {
+mongoose.connection.on('disconnected', () => {
     console.log('Mongoose default connection disconnected');
 });
 
@@ -48,19 +49,21 @@ mongoose.connection.on('disconnected', function () {
  * Auth0 Security Configuration
  */
 
-var jwtCheck = jwt({
-    secret: jwks.expressJwtSecret({
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: "https://wolf-beacon.auth0.com/.well-known/jwks.json"
+        jwksUri: `https://wolf-beacon.auth0.com/.well-known/jwks.json`
     }),
-    audience: 'http://api.wolfbeacon.com',
-    issuer: "https://wolf-beacon.auth0.com/",
+
+    // Validate the audience and the issuer.
+    audience: '{process.env.AUTH0_AUDIENCE}',
+    issuer: `https://wolf-beacon.auth0.com/`,
     algorithms: ['RS256']
 });
 
-// app.use(jwtCheck);
+// app.use(checkJwt);
 
 
 /**
@@ -74,11 +77,7 @@ app.use(bodyParser.urlencoded({extended: false}));
  * Add Routes
  */
 
-var animalRoutes = require('./routes/animal-routes');
-app.use('/animals', animalRoutes);
-
-var hackathonRoutes = require('./routes/hackathon-routes');
-app.use('/hackathons', hackathonRoutes);
+app.use('/', routes);
 
 /**
  * Error Handlers
@@ -86,14 +85,14 @@ app.use('/hackathons', hackathonRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // development error handler print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
+    app.use((err, req, res, next) => {
         res.status(err.status || 500);
         res.json({
             message: err.message,
@@ -103,7 +102,7 @@ if (app.get('env') === 'development') {
 }
 
 // production error no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({
         message: err.message,
@@ -111,4 +110,4 @@ app.use(function (err, req, res, next) {
     });
 });
 
-module.exports = app;
+export default app;

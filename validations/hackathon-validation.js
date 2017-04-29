@@ -1,11 +1,12 @@
-var Joi = require('joi');
+import Joi from 'joi';
 
-module.exports = {
+HackathonValidation = {
     createHackathon: {
         body: {
             id: Joi.number().required(),
-            uuid: Joi.string().required(),
-            data: Joi.object().required()
+            uuid: Joi.string().required()
         }
     }
 };
+
+export default HackathonValidation;
