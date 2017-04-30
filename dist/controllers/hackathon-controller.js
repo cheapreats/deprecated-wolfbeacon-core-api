@@ -14,19 +14,27 @@ var _userService2 = _interopRequireDefault(_userService);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function createHackathon(req, res) {
-    var hackathonId = req.body.id;
-    var hackathonUuid = req.body.uuid;
-    var hackathonBody = req.body.data;
-    var userId = req.body.userId;
+function createHackathon(req, res, next) {
+    try {
+        var hackathonId = parseInt(req.body.id);
+        var hackathonUuid = req.body.uuid;
+        var hackathonBody = req.body.data;
+        var userId = req.body.userId;
 
-    _hackathonService2.default.createHackathon(hackathonId, hackathonUuid, hackathonBody).then(_userService2.default.createOrUpsertUser(userId)).then(_userService2.default.makeUserHackathonOrganiser(userId, hackathonId)).then(_hackathonService2.default.addUserToHackathonOrganisers(userId, hackathonId)).then(res.json({
-        status: 'SUCCESS',
-        message: 'Successfully created Hackathon ' + hackathonId + ' linked to user ' + userId
-    })).catch(function (e) {
-        res.json({ status: 'ERROR', message: 'Unable to create hackathon' });
+        //Not consistent if one of these operations fails. Stupid MongoDB and Mongoose
+        _hackathonService2.default.createHackathon(hackathonId, hackathonUuid, hackathonBody);
+        _userService2.default.createOrUpsertUser(userId);
+        _userService2.default.makeUserHackathonOrganiser(userId, hackathonId);
+        _hackathonService2.default.addUserToHackathonOrganisers(userId, hackathonId);
+
+        res.json({
+            status: 'SUCCESS',
+            message: 'Successfully created Hackathon ' + hackathonId + ' linked to user ' + userId
+        });
+    } catch (e) {
         console.error(e);
-    });
+        res.json({ status: 'ERROR', message: 'Unable to create hackathon' });
+    }
 }
 
 function getHackathonDataAsOrganiser(req, res) {}

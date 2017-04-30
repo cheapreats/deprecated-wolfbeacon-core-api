@@ -1,5 +1,4 @@
-import Hackathon from '../models/user-model';
-import User from '../models/user-model';
+import Hackathon from '../models/hackathon-model';
 
 
 const HackathonService = {
@@ -12,9 +11,13 @@ const HackathonService = {
         let hackathon = new Hackathon({
             _id: hackathonId,
             uuid: hackathonUuid,
-            data: JSON.parse(hackathonData)
+            data: hackathonData
         });
-        hackathon.save();
+        hackathon.save(function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
     },
 
     /**
@@ -25,8 +28,13 @@ const HackathonService = {
     addUserToHackathonOrganisers(userId, hackathonId) {
         Hackathon.findByIdAndUpdate(
             hackathonId,
-            {$push: {organisers: userId}},
-            {safe: true, upsert: true}
+            {$addToSet: {organisers: userId}},
+            {safe: true, upsert: true},
+            function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            }
         );
     },
 
@@ -58,10 +66,12 @@ const HackathonService = {
     /**
      * Reading Hackathons from DB
      */
-
-    getHackathonDataAsOrganiser(userId, hackathonId) {
-        return JSON.parse(Hackathon.findOne({'_id': hackathonId}));
-    }
+    //
+    // getHackathonDataAsOrganiser(userId, hackathonId) {
+    //     Hackathon.find(hackathonId, {organisers: {"$in": [userId]}}, function (err, docs) {
+    //         if ()
+    //     });
+    // }
 };
 
 

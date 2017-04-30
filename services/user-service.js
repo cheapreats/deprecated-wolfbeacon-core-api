@@ -1,18 +1,24 @@
 import User from '../models/user-model';
 
 const UserService = {
+
     /**
      * Create or Upsert
      */
 
     createOrUpsertUser(userId) {
         const user = new User({
-            user_id: userId
+            _id: userId
         });
         User.findOneAndUpdate(
-            {user_id: userId},
+            {_id: userId},
             user,
-            {upsert: true, new: true}
+            {upsert: true, new: true},
+            function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            }
         );
     },
 
@@ -23,8 +29,12 @@ const UserService = {
     makeUserHackathonOrganiser(userId, hackathonId) {
         User.findByIdAndUpdate(
             userId,
-            {$push: {hackathon_organiser: hackathonId}},
-            {safe: true, upsert: true}
+            {$addToSet: {organising: hackathonId}},
+            function (err) {
+                if (err) {
+                    console.log(err);
+                }
+            }
         );
     },
 
@@ -32,7 +42,7 @@ const UserService = {
     makeUserHackathonVolunteer(userId, hackathonId) {
         User.findByIdAndUpdate(
             userId,
-            {$push: {hackathon_volunteer: hackathonId}},
+            {$push: {volunteering: hackathonId}},
             {safe: true, upsert: true}
         );
     },
@@ -40,7 +50,7 @@ const UserService = {
     makeUserHackathonParticipant(userId, hackathonId) {
         User.findByIdAndUpdate(
             userId,
-            {$push: {hackathon_participant: hackathonId}},
+            {$push: {participating: hackathonId}},
             {safe: true, upsert: true}
         );
     },
@@ -48,7 +58,7 @@ const UserService = {
     makeUserHackathonMentor(userId, hackathonId) {
         User.findByIdAndUpdate(
             userId,
-            {$push: {hackathon_mentor: hackathonId}},
+            {$push: {mentoring: hackathonId}},
             {safe: true, upsert: true}
         );
     }

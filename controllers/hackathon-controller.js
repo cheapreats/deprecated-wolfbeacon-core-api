@@ -1,28 +1,30 @@
 import HackathonService from '../services/hackathon-service';
-import UserService from '../services/user-service';
+import UserService from '../services/user-service'
 
+function createHackathon(req, res, next) {
+    try {
+        const hackathonId = parseInt(req.body.id);
+        const hackathonUuid = req.body.uuid;
+        const hackathonBody = req.body.data;
+        const userId = req.body.userId;
 
-function createHackathon(req, res) {
-    const hackathonId = req.body.id;
-    const hackathonUuid = req.body.uuid;
-    const hackathonBody = req.body.data;
-    const userId = req.body.userId;
+        //Not consistent if one of these operations fails. Stupid MongoDB and Mongoose
+        HackathonService.createHackathon(hackathonId, hackathonUuid, hackathonBody);
+        UserService.createOrUpsertUser(userId);
+        UserService.makeUserHackathonOrganiser(userId, hackathonId);
+        HackathonService.addUserToHackathonOrganisers(userId, hackathonId);
 
-    HackathonService.createHackathon(hackathonId, hackathonUuid, hackathonBody)
-        .then(UserService.createOrUpsertUser(userId))
-        .then(UserService.makeUserHackathonOrganiser(userId, hackathonId))
-        .then(HackathonService.addUserToHackathonOrganisers(userId, hackathonId))
-        .then(res.json({
+        res.json({
             status: 'SUCCESS',
             message: `Successfully created Hackathon ${hackathonId} linked to user ${userId}`
-        }))
-        .catch((e) => {
-            res.json({status: 'ERROR', message: 'Unable to create hackathon'});
-            console.error(e);
         })
+    } catch (e) {
+        console.error(e);
+        res.json({status: 'ERROR', message: 'Unable to create hackathon'});
+    }
 }
 
-function getHackathonDataAsOrganiser (req, res) {
+function getHackathonDataAsOrganiser(req, res) {
 
 }
 
