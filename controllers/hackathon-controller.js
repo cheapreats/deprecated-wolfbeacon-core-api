@@ -26,4 +26,4 @@ function getHackathonDataAsOrganiser (req, res) {
 
 }
 
-export default {createHackathon}
+export default {createHackathon, getHackathonDataAsOrganiser}

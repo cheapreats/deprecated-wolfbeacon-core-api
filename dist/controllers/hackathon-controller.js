@@ -31,5 +31,5 @@ function createHackathon(req, res) {
 
 function getHackathonDataAsOrganiser(req, res) {}
 
-exports.default = { createHackathon: createHackathon };
+exports.default = { createHackathon: createHackathon, getHackathonDataAsOrganiser: getHackathonDataAsOrganiser };
 //# sourceMappingURL=hackathon-controller.js.map
