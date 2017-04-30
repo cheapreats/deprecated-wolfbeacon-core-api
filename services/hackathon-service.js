@@ -1,12 +1,12 @@
 import Hackathon from '../models/user-model';
 import User from '../models/user-model';
 
-/**
- * Creating
- */
-
 
 const HackathonService = {
+
+    /**
+     * Creating a Hackathon Service
+     */
 
     createHackathon(hackathonId, hackathonUuid, hackathonData) {
         let hackathon = new Hackathon({

@@ -1,5 +1,5 @@
 import express from 'express';
-import HackathonRoutes from 'hackathon-routes';
+import HackathonRoutes from './hackathon-routes';
 
 const router = express.Router();
 

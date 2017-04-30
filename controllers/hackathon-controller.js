@@ -22,4 +22,8 @@ function createHackathon(req, res) {
         })
 }
 
+function getHackathonDataAsOrganiser (req, res) {
+
+}
+
 export default {createHackathon}

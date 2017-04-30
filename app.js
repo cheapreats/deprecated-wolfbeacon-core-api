@@ -7,8 +7,8 @@ import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import env from 'node-env-file';
-import jwt from 'express-jwt';
-import jwks from 'jwks-rsa';
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 import routes from './routes/index'
 
@@ -110,4 +110,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-export default app;
+module.exports = app;

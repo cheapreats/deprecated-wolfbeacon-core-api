@@ -7,5 +7,7 @@ const router = express.Router();
 router.route('/create')
     .post(validate(HackathonValidation.createHackathon), HackathonController.createHackathon);
 
+router.route('/')
+    .get(HackathonController.getHackathonDataAsOrganiser);
 
 export default router;

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-HackathonValidation = {
+const HackathonValidation = {
     createHackathon: {
         body: {
             id: Joi.number().required(),
