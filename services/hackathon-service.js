@@ -1,5 +1,5 @@
 import Hackathon from '../models/hackathon-model';
-
+import User from '../models/user-model';
 
 const HackathonService = {
 
@@ -8,16 +8,11 @@ const HackathonService = {
      */
 
     createHackathon(hackathonId, hackathonUuid, hackathonData) {
-        let hackathon = new Hackathon({
-            _id: hackathonId,
+        return new Hackathon({
+            hackathonId: hackathonId,
             uuid: hackathonUuid,
             data: hackathonData
-        });
-        hackathon.save(function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
+        }).save();
     },
 
     /**
@@ -26,52 +21,49 @@ const HackathonService = {
 
 
     addUserToHackathonOrganisers(userId, hackathonId) {
-        Hackathon.findByIdAndUpdate(
-            hackathonId,
-            {$addToSet: {organisers: userId}},
-            {safe: true, upsert: true},
-            function (err) {
-                if (err) {
-                    console.log(err);
-                }
-            }
-        );
+        return Hackathon.findOneAndUpdate(
+            {hackathonId: hackathonId},
+            {$addToSet: {organisers: userId.toString()}},
+            {new: true},
+        ).exec();
     },
 
     addUserToHackathonVolunteers(userId, hackathonId) {
-        Hackathon.findByIdAndUpdate(
-            hackathonId,
-            {$push: {volunteers: userId}},
-            {safe: true, upsert: true}
-        );
+        return Hackathon.findOneAndUpdate(
+            {hackathonId: hackathonId},
+            {$addToSet: {volunteers: userId.toString()}},
+            {new: true},
+        ).exec();
     },
 
     addUserToHackathonParticipants(userId, hackathonId) {
-        Hackathon.findByIdAndUpdate(
-            hackathonId,
-            {$push: {participants: userId}},
-            {safe: true, upsert: true}
-        );
+        return Hackathon.findOneAndUpdate(
+            {hackathonId: hackathonId},
+            {$addToSet: {participants: userId.toString()}},
+            {new: true},
+        ).exec();
     },
 
 
     addUserToHackathonMentors(userId, hackathonId) {
-        Hackathon.findByIdAndUpdate(
-            hackathonId,
-            {$push: {mentors: userId}},
-            {safe: true, upsert: true}
-        );
+        return Hackathon.findOneAndUpdate(
+            {hackathonId: hackathonId},
+            {$addToSet: {mentors: userId.toString()}},
+            {new: true},
+        ).exec();
     },
 
     /**
-     * Reading Hackathons from DB
+     * Fetch Hackathon Details
      */
-    //
-    // getHackathonDataAsOrganiser(userId, hackathonId) {
-    //     Hackathon.find(hackathonId, {organisers: {"$in": [userId]}}, function (err, docs) {
-    //         if ()
-    //     });
-    // }
+
+    fetchHackathonDetails(hackathonId) {
+        return Hackathon.findOne(
+            {hackathonId : hackathonId}
+        ).exec();
+    },
+
+
 };
 
 

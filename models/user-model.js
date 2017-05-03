@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-    _id: {type: String, required: true},
+    userId: {type: String, required: true},
     organising: [String],
     volunteering: [String],
     participating: [String],

@@ -8,6 +8,10 @@ var _hackathonModel = require('../models/hackathon-model');
 
 var _hackathonModel2 = _interopRequireDefault(_hackathonModel);
 
+var _userModel = require('../models/user-model');
+
+var _userModel2 = _interopRequireDefault(_userModel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var HackathonService = {
@@ -17,16 +21,11 @@ var HackathonService = {
      */
 
     createHackathon: function createHackathon(hackathonId, hackathonUuid, hackathonData) {
-        var hackathon = new _hackathonModel2.default({
-            _id: hackathonId,
+        return new _hackathonModel2.default({
+            hackathonId: hackathonId,
             uuid: hackathonUuid,
             data: hackathonData
-        });
-        hackathon.save(function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
+        }).save();
     },
 
 
@@ -35,20 +34,25 @@ var HackathonService = {
      */
 
     addUserToHackathonOrganisers: function addUserToHackathonOrganisers(userId, hackathonId) {
-        _hackathonModel2.default.findByIdAndUpdate(hackathonId, { $addToSet: { organisers: userId } }, { safe: true, upsert: true }, function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
+        return _hackathonModel2.default.findOneAndUpdate({ hackathonId: hackathonId }, { $addToSet: { organisers: userId.toString() } }, { new: true }).exec();
     },
     addUserToHackathonVolunteers: function addUserToHackathonVolunteers(userId, hackathonId) {
-        _hackathonModel2.default.findByIdAndUpdate(hackathonId, { $push: { volunteers: userId } }, { safe: true, upsert: true });
+        return _hackathonModel2.default.findOneAndUpdate({ hackathonId: hackathonId }, { $addToSet: { volunteers: userId.toString() } }, { new: true }).exec();
     },
     addUserToHackathonParticipants: function addUserToHackathonParticipants(userId, hackathonId) {
-        _hackathonModel2.default.findByIdAndUpdate(hackathonId, { $push: { participants: userId } }, { safe: true, upsert: true });
+        return _hackathonModel2.default.findOneAndUpdate({ hackathonId: hackathonId }, { $addToSet: { participants: userId.toString() } }, { new: true }).exec();
     },
     addUserToHackathonMentors: function addUserToHackathonMentors(userId, hackathonId) {
-        _hackathonModel2.default.findByIdAndUpdate(hackathonId, { $push: { mentors: userId } }, { safe: true, upsert: true });
+        return _hackathonModel2.default.findOneAndUpdate({ hackathonId: hackathonId }, { $addToSet: { mentors: userId.toString() } }, { new: true }).exec();
+    },
+
+
+    /**
+     * Fetch Hackathon Details
+     */
+
+    fetchHackathonDetails: function fetchHackathonDetails(hackathonId) {
+        return _hackathonModel2.default.findOne({ hackathonId: hackathonId }).exec();
     }
 };
 

@@ -5,9 +5,9 @@ import HackathonController from '../controllers/hackathon-controller';
 const router = express.Router();
 
 router.route('/create')
-    .post(validate(HackathonValidation.createHackathon), HackathonController.createHackathon);
+    .post(validate(HackathonValidation.createHackathonValidation), HackathonController.createHackathonController);
 
-router.route('/')
-    .get(HackathonController.getHackathonDataAsOrganiser);
+router.route('/fetch?')
+    .get(HackathonController.fetchHackathonDetailsController);
 
 export default router;

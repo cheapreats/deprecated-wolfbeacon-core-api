@@ -18,13 +18,9 @@ var UserService = {
 
     createOrUpsertUser: function createOrUpsertUser(userId) {
         var user = new _userModel2.default({
-            _id: userId
+            userId: userId
         });
-        _userModel2.default.findOneAndUpdate({ _id: userId }, user, { upsert: true, new: true }, function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
+        return _userModel2.default.findOneAndUpdate({ userId: userId }, user, { upsert: true, new: true }).exec();
     },
 
 
@@ -33,11 +29,7 @@ var UserService = {
      */
 
     makeUserHackathonOrganiser: function makeUserHackathonOrganiser(userId, hackathonId) {
-        _userModel2.default.findByIdAndUpdate(userId, { $addToSet: { organising: hackathonId } }, function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
+        return _userModel2.default.findOneAndUpdate({ userId: userId }, { $addToSet: { organising: hackathonId } }).exec();
     },
     makeUserHackathonVolunteer: function makeUserHackathonVolunteer(userId, hackathonId) {
         _userModel2.default.findByIdAndUpdate(userId, { $push: { volunteering: hackathonId } }, { safe: true, upsert: true });

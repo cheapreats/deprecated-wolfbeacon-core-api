@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const HackathonValidation = {
-    createHackathon: {
+    createHackathonValidation: {
         body: {
             id: Joi.number().required(),
             uuid: Joi.string().required(),

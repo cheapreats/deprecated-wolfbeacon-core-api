@@ -24,9 +24,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var router = _express2.default.Router();
 
-router.route('/create').post((0, _expressValidation2.default)(_hackathonValidation2.default.createHackathon), _hackathonController2.default.createHackathon);
+router.route('/create').post((0, _expressValidation2.default)(_hackathonValidation2.default.createHackathonValidation), _hackathonController2.default.createHackathonController);
 
-router.route('/').get(_hackathonController2.default.getHackathonDataAsOrganiser);
+router.route('/fetch?').get(_hackathonController2.default.fetchHackathonDetailsController);
 
 exports.default = router;
 //# sourceMappingURL=hackathon-routes.js.map

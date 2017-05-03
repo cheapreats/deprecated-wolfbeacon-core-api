@@ -7,19 +7,14 @@ const UserService = {
      */
 
     createOrUpsertUser(userId) {
-        const user = new User({
-            _id: userId
+        let user = new User({
+            userId: userId
         });
-        User.findOneAndUpdate(
-            {_id: userId},
+        return User.findOneAndUpdate(
+            {userId: userId},
             user,
             {upsert: true, new: true},
-            function (err) {
-                if (err) {
-                    console.log(err);
-                }
-            }
-        );
+        ).exec();
     },
 
     /**
@@ -27,15 +22,10 @@ const UserService = {
      */
 
     makeUserHackathonOrganiser(userId, hackathonId) {
-        User.findByIdAndUpdate(
-            userId,
+        return User.findOneAndUpdate(
+            {userId: userId},
             {$addToSet: {organising: hackathonId}},
-            function (err) {
-                if (err) {
-                    console.log(err);
-                }
-            }
-        );
+        ).exec();
     },
 
 

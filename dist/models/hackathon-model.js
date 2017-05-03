@@ -11,7 +11,7 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var hackathonSchema = new _mongoose2.default.Schema({
-    _id: { type: Number, required: true },
+    hackathonId: { type: Number, required: true },
     uuid: { type: String, required: true },
     data: { type: Object, required: true },
     organisers: [String],

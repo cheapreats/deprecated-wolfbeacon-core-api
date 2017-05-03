@@ -11,12 +11,12 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var userSchema = new _mongoose2.default.Schema({
-    userId: { type: String, required: true },
+    _id: { type: String, required: true },
     organising: [String],
     volunteering: [String],
     participating: [String],
     mentoring: [String]
-});
+}, { _id: false });
 
-exports.default = _mongoose2.default.model('User', userSchema);
-//# sourceMappingURL=user-model.js.map
+exports.default = _mongoose2.default.model('Gandu', userSchema);
+//# sourceMappingURL=gandu-model.js.map
