@@ -8,4 +8,4 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD ["babel-node", "./bin/www"]
+CMD ["node_modules/.bin/babel-node", "./bin/www"]
