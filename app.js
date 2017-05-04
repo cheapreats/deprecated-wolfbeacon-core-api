@@ -37,6 +37,9 @@ const connectToDatabase = () => {
     const options = {
         // user: process.env.MONGODB_USERNAME,
         // pass: process.env.MONGODB_PASSWORD,
+        // auth: {
+        //     authdb: 'admin'
+        // },
         server: {socketOptions: {keepAlive: 1}}
     };
     mongoose.connect(process.env.MONGODB_URI, options);
