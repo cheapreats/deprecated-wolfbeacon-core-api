@@ -31,16 +31,16 @@ function createHackathonController(req, res, next) {
                 })
         }).catch((err) => {
         console.error(err);
-        res.json({status: 'ERROR', message: 'Unable to create hackathon'});
+        next(err);
     });
 }
 
-function fetchHackathonDetailsController(req, res) {
+function fetchHackathonDetailsController(req, res, next) {
     const hackathonId = parseInt(req.query.hackathonId);
     HackathonService.fetchHackathonDetails(hackathonId).then((data) => {
         res.json(data.data);
     }).catch((err) => {
-        console.log(err);
+        next(err);
     });
 
 }

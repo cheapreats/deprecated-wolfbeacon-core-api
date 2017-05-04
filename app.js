@@ -16,11 +16,24 @@ const app = express();
 
 env(__dirname + '/.env');
 
+
+/**
+ * Add Other Configuration
+ */
+
+
+app.use(favicon('favicon.ico'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+
 /**
  * Connect to MongoDB
  */
 
-const connectToDatabase = function () {
+mongoose.Promise = require('bluebird');
+
+const connectToDatabase = () => {
     const options = {
         // user: process.env.MONGODB_USERNAME,
         // pass: process.env.MONGODB_PASSWORD,
@@ -30,24 +43,23 @@ const connectToDatabase = function () {
 };
 connectToDatabase();
 
-// When successfully connected
 mongoose.connection.on('connected', () =>
     console.log('Mongoose default connection open to ' + process.env.MONGODB_URI)
 );
 
-// If the connection throws an error
 mongoose.connection.on('error', (err) => {
     console.log('Mongoose default connection error: ' + err);
 });
 
-// When the connection is disconnected
 mongoose.connection.on('disconnected', () => {
     console.log('Mongoose default connection disconnected');
 });
 
+
 /**
  * Auth0 Security Configuration
  */
+
 
 const checkJwt = jwt({
     secret: jwksRsa.expressJwtSecret({
@@ -67,17 +79,12 @@ const checkJwt = jwt({
 
 
 /**
- * Add Other Configuration
- */
-app.use(favicon('favicon.ico'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-/**
  * Add Routes
  */
 
+
 app.use('/', routes);
+
 
 /**
  * Error Handlers
@@ -90,23 +97,11 @@ app.use(function (req, res, next) {
     next(err);
 });
 
-// development error handler print stacktrace
-if (app.get('env') === 'development') {
-    app.use((err, req, res, next) => {
-        res.status(err.status || 500);
-        res.json({
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error no stacktraces leaked to user
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     res.status(err.status || 500);
     res.json({
-        message: err.message,
-        error: {}
+        status: "ERROR",
+        message: err.message
     });
 });
 

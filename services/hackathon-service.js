@@ -1,5 +1,4 @@
 import Hackathon from '../models/hackathon-model';
-import User from '../models/user-model';
 
 const HackathonService = {
 
@@ -61,8 +60,7 @@ const HackathonService = {
         return Hackathon.findOne(
             {hackathonId : hackathonId}
         ).exec();
-    },
-
+    }
 
 };
 
