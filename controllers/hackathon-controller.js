@@ -23,8 +23,6 @@ async function createHackathonController(req, res, next) {
         console.error(err);
         next(err);
     }
-
-
 }
 
 function fetchHackathonDetailsController(req, res, next) {
