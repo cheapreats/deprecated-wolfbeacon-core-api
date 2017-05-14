@@ -1,38 +1,30 @@
 import HackathonService from '../services/hackathon-service';
 import UserService from '../services/user-service'
 
-function createHackathonController(req, res, next) {
-    const hackathonId = parseInt(req.body.id);
-    const hackathonUuid = req.body.uuid;
-    const hackathonData = req.body.data;
-    const userId = req.body.userId;
+async function createHackathonController(req, res, next) {
+    try {
+        const hackathonId = parseInt(req.body.id);
+        const hackathonUuid = req.body.uuid;
+        const hackathonData = req.body.data;
+        const userId = req.body.userId;
 
-    //Not consistent if one of these operations fails. MongoDB and Mongoose smh...
-    //Tried enforcing promises to make flow better and ensure forward consistency atleast
-    //Kept the closure going, I could avoid promise nesting but wouldn't be able to log
-    HackathonService.createHackathon(hackathonId, hackathonUuid, hackathonData)
-        .then((addedHackathon) => {
-            console.log(`Hackathon added: \n ${addedHackathon}`);
-            UserService.createOrUpsertUser(userId)
-                .then((addedUser) => {
-                    console.log(`User upserted: \n ${addedUser}`);
-                    HackathonService.addUserToHackathonOrganisers(userId, hackathonId)
-                        .then((upsertedUser) => {
-                            console.log(`User ${upsertedUser} added as organisers to Hackathon ${addedHackathon}`);
-                            UserService.makeUserHackathonOrganiser(userId, hackathonId)
-                                .then((user) => {
-                                    console.log(`User ${upsertedUser} is organising of Hackathon ${addedHackathon}`);
-                                    res.json({
-                                        status: 'SUCCESS',
-                                        message: `Successfully created Hackathon ${hackathonId} linked to user ${userId}`
-                                    })
-                                });
-                        });
-                })
-        }).catch((err) => {
+        await HackathonService.createHackathon(hackathonId, hackathonUuid, hackathonData);
+        await UserService.createOrUpsertUser(userId);
+        await HackathonService.addUserToHackathonOrganisers(userId, hackathonId);
+        await UserService.makeUserHackathonOrganiser(userId, hackathonId);
+
+        console.log(`Hackathon ${hackathonId}, User ${userId} inserted and linked in DB`);
+        res.json({
+            status: 'SUCCESS',
+            message: `Successfully created Hackathon ${hackathonId} linked to user ${userId}`
+        })
+
+    } catch (err) {
         console.error(err);
         next(err);
-    });
+    }
+
+
 }
 
 function fetchHackathonDetailsController(req, res, next) {
