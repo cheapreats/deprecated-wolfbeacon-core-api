@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www",
+    "start": "node_modules/.bin/babel-node ./bin/www",
     "test": "nodemon ./bin/www --exec babel-node"
   },
   "dependencies": {
+    "apidoc": "^0.17.6",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
     "babel-preset-env": "^1.4.0",

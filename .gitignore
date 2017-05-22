@@ -2,6 +2,7 @@
 .env
 node_modules
 dist
+/doc
 /routes/animal-routes.js
 /models/animal-model.js
 .idea
