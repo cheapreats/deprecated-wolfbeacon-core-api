@@ -7,6 +7,7 @@ import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import env from 'node-env-file';
+const path = require('path');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
@@ -26,6 +27,7 @@ app.use(favicon('favicon.ico'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use('/core-api-docs', express.static(path.join(__dirname + '/doc')));
 
 /**
  * Connect to MongoDB
@@ -78,7 +80,7 @@ const checkJwt = jwt({
     algorithms: ['RS256']
 });
 
-// app.use(checkJwt);
+// app.use('/api', checkJwt);
 
 
 /**
@@ -90,8 +92,9 @@ app.use('/', routes);
 
 
 /**
- * Error Handlers
+ * Error Handler
  */
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

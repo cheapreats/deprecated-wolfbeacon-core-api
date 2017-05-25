@@ -1,21 +1,20 @@
 var request = require('request');
-
-var myJSONObject = {
-    id : 212,
-    uuid: "qdfqwe1dg13rgagqegqweg",
-    data: {
-        "hello" : {
-            "World" : "is dead"
-        }
-    },
-    userId: "master"
-};
-
 request({
-    url: "http://localhost:3000/hackathons/create",
-    method: "POST",
-    json: true,   // <--Very important!!!
-    body: myJSONObject
-}, function (error, response, body){
-    console.log(body);
-});
+        method: 'POST',
+        url: "http://localhost:3000/hackathon/",
+        body: {
+            id: 712,
+            uuid: "ed0acef0-6078-4348-8a91-27fa51fb6851",
+            data: {
+                "exampleHackathonData": {
+                    "Name": "Hack The Valley"
+                }
+            },
+            userId: "151262315"
+        },
+        json: true,
+        headers: {authorization: 'Bearer access-token-here'}
+    }
+    , function (error, response, body) {
+        console.log(body);
+    });

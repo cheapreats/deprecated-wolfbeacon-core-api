@@ -3,10 +3,10 @@ import User from '../models/user-model';
 const UserService = {
 
     /**
-     * Create or Upsert
+     * Update or Create user
      */
 
-    createOrUpsertUser(userId) {
+    upsertUser(userId) {
         let user = new User({
             userId: userId
         });

@@ -9,13 +9,12 @@ async function createHackathonController(req, res, next) {
         const userId = req.body.userId;
 
         await HackathonService.createHackathon(hackathonId, hackathonUuid, hackathonData);
-        await UserService.createOrUpsertUser(userId);
+        await UserService.upsertUser(userId);
         await HackathonService.addUserToHackathonOrganisers(userId, hackathonId);
         await UserService.makeUserHackathonOrganiser(userId, hackathonId);
 
         console.log(`Hackathon ${hackathonId}, User ${userId} inserted and linked in DB`);
         res.json({
-            status: 'SUCCESS',
             message: `Successfully created Hackathon ${hackathonId} linked to user ${userId}`
         })
 
@@ -26,7 +25,7 @@ async function createHackathonController(req, res, next) {
 }
 
 function fetchHackathonDetailsController(req, res, next) {
-    const hackathonId = parseInt(req.query.hackathonId);
+    const hackathonId = parseInt(req.params.id);
     HackathonService.fetchHackathonDetails(hackathonId).then((data) => {
         res.json(data.data);
     }).catch((err) => {
