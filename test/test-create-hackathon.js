@@ -1,7 +1,7 @@
 var request = require('request');
 request({
         method: 'POST',
-        url: "http://localhost:3000/hackathon/",
+        url: "http://localhost:3000/api/hackathon/",
         body: {
             id: 712,
             uuid: "ed0acef0-6078-4348-8a91-27fa51fb6851",

@@ -88,7 +88,7 @@ const checkJwt = jwt({
  */
 
 
-app.use('/', routes);
+app.use('/api', routes);
 
 
 /**
