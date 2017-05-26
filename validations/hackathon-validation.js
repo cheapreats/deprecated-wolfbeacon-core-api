@@ -7,6 +7,13 @@ const HackathonValidation = {
             uuid: Joi.string().required(),
             data: Joi.object().required()
         }
+    },
+
+    updateHackathonDataValidation: {
+        body: {
+            id: Joi.number().required(),
+            data: Joi.object().required()
+        }
     }
 };
 

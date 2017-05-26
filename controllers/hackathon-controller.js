@@ -27,11 +27,27 @@ async function createHackathonController(req, res, next) {
 function fetchHackathonDetailsController(req, res, next) {
     const hackathonId = parseInt(req.params.id);
     HackathonService.fetchHackathonDetails(hackathonId).then((data) => {
+        console.log(data);
         res.json(data.data);
     }).catch((err) => {
+        console.log(err);
         next(err);
     });
-
 }
 
-export default {createHackathonController, fetchHackathonDetailsController}
+function updateHackathonDetailsController(req, res, next) {
+    const hackathonId = parseInt(req.body.id);
+    const updatedHackathonData = req.body.data;
+    HackathonService.updateHackathonDetails(hackathonId, updatedHackathonData).then((data) => {
+        console.log(data);
+        console.log(`Hackathon ${hackathonId} updated in system`);
+        res.json({
+            message: `Successfully updated Hackathon ${hackathonId}`
+        })
+    }).catch((err) => {
+        console.error(error);
+        next(err);
+    });
+}
+
+export default {createHackathonController, fetchHackathonDetailsController, updateHackathonDetailsController}

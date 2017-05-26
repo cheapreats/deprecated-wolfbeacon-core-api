@@ -58,10 +58,20 @@ const HackathonService = {
 
     fetchHackathonDetails(hackathonId) {
         return Hackathon.findOne(
-            {hackathonId : hackathonId}
+            {hackathonId: hackathonId}
+        ).exec();
+    },
+
+    /**
+     * Update Hackathon Details
+     */
+
+    updateHackathonDetails(hackathonId, updatedHackathonData) {
+        return Hackathon.updateOne(
+            {hackathonId: hackathonId},
+            {data: updatedHackathonData}
         ).exec();
     }
-
 };
 
 

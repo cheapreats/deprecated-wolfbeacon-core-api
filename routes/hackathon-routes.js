@@ -13,10 +13,10 @@ const router = express.Router();
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} hackathonId   Hackathon Id
- * @apiParam {String} hackathonUuid Hackathon UUID
- * @apiParam {Object} hackathonData Hackathon Data as JSON Object
- * @apiParam {String} UserId        Auth0 User Id.
+ * @apiParam {String} id   Hackathon Id
+ * @apiParam {String} uuid Hackathon UUID
+ * @apiParam {Object} data Hackathon Data as JSON Object
+ * @apiParam {String} userId        Auth0 User Id.
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
@@ -57,7 +57,7 @@ router.route('/')
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {Number} hackathonId Hackathon Id.
+ * @apiParam {Number} id Hackathon Id.
  * @apiExample {js} Example Request (JS):
  var request = require('request');
 
@@ -78,5 +78,46 @@ router.route('/')
  */
 router.route('/:id')
     .get(HackathonController.fetchHackathonDetailsController);
+
+/**
+ * @api {post} /hackathons/:id/data Update Hackathon Data
+ * @apiName UpdateHackathon
+ * @apiGroup Hackathon
+ * @apiVersion 0.0.1
+ * @apiDescription Update Hackathon Data in the System
+ *
+ * @apiHeader {String} authorization Auth0 Access Token.
+ *
+ * @apiParam {String} id   Hackathon Id
+ * @apiParam {Object} data Hackathon Data as JSON Object
+ *
+ * @apiExample {js} Example Request (JS):
+ var request = require('request');
+ request({
+        method: 'POST',
+        url: "https://wolfbeacon.com/api/hackathon/712/data",
+        body: {
+            id: 712,
+            data: {
+                "exampleHackathonData": {
+                    "Name": "Hack The Valley"
+                    "Organizer" : "Ralphie buoy"
+                }
+            }
+        },
+        json: true,
+        headers: {authorization: 'Bearer access-token-here'}
+    }
+ , function (error, response, body) {
+        console.log(body);
+    });
+ *
+ * @apiSuccessExample {json} Success Response
+ * {message: 'Successfully updated Hackathon 712' }
+ *
+ */
+router.route('/:id/data')
+    .post(validate(HackathonValidation.updateHackathonDataValidation), HackathonController.updateHackathonDetailsController);
+
 
 export default router;
