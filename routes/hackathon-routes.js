@@ -5,7 +5,7 @@ import HackathonController from '../controllers/hackathon-controller';
 const router = express.Router();
 
 /**
- * @api {post} /hackathon/ Create Hackathon
+ * @api {post} /hackathons/ Create Hackathon
  * @apiName CreateHackathon
  * @apiGroup Hackathon
  * @apiVersion 0.0.1
@@ -22,7 +22,7 @@ const router = express.Router();
  var request = require('request');
  request({
         method: 'POST',
-        url: "https://wolfbeacon.com/api/hackathon/",
+        url: "https://wolfbeacon.com/api/hackathons/",
         body: {
             id: 712,
             uuid: "ed0acef0-6078-4348-8a91-27fa51fb6851",
@@ -49,7 +49,7 @@ router.route('/')
     .post(validate(HackathonValidation.createHackathonValidation), HackathonController.createHackathonController);
 
 /**
- * @api {get} /hackathon/:id Get Hackathon
+ * @api {get} /hackathons/:id Get Hackathon
  * @apiName GetHackathon
  * @apiGroup Hackathon
  * @apiVersion 0.0.1
@@ -63,7 +63,7 @@ router.route('/')
 
  let hackathonId = 712;
 
- request.get(`https://wolfbeacon.com/api/hackathon/${hackathonId}`, function (err, res, body) {
+ request.get(`https://wolfbeacon.com/api/hackathons/${hackathonId}`, function (err, res, body) {
     if (err) {
         console.log(err)
     } else {

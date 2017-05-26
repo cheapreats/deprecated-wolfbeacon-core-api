@@ -3,7 +3,7 @@ import HackathonRoutes from './hackathon-routes';
 
 const router = express.Router();
 
-router.use('/hackathon', HackathonRoutes);
+router.use('/hackathons', HackathonRoutes);
 
 router.route('/ping')
     .get(function (req, res) {
