@@ -7,13 +7,13 @@ const router = express.Router();
 /**
  * @api {post} /hackathons/ Create Hackathon
  * @apiName CreateHackathon
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Create a Hackathon in the System
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  * @apiParam {String} uuid Hackathon UUID
  * @apiParam {Object} data Hackathon Data as JSON Object
  * @apiParam {String} userId        Auth0 User Id.
@@ -51,24 +51,20 @@ router.route('/')
 /**
  * @api {get} /hackathons/:id Get Hackathon Data
  * @apiName GetHackathonData
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Retrieve details/description for a particular hackathon referencing it's Hackathon Id (hackathonId) of that particular Hackathon.
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {Number} id Hackathon Id.
+ * @apiParam {Number} id Hackathon Id
  * @apiExample {js} Example Request (JS):
  var request = require('request');
 
  let hackathonId = 712;
 
  request.get(`http://localhost:3000/api/hackathons/${hackathonId}`, function (err, res, body) {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log(body);
-    }
+    console.log((err?err:body))
 });
  *
  * @apiSuccessExample {json} Success Response
@@ -82,13 +78,13 @@ router.route('/:id')
 /**
  * @api {post} /hackathons/:id/data Update Hackathon Data
  * @apiName UpdateHackathonData
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Update Hackathon Data in the System
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  * @apiParam {Object} data Hackathon Data as JSON Object
  *
  * @apiExample {js} Example Request (JS):
@@ -122,23 +118,19 @@ router.route('/:id/data')
 /**
  * @api {get} /hackathons/:id/is-published Get Published Status
  * @apiName GetIsPublished
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Retrieves the 'Published' status for a Hackathon, indicating 'true' if it is publicly visible for applications and 'false' otherwise.
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
  let hackathonId = 712;
  request.get(`http://localhost:3000/api/hackathons/${hackathonId}/is-published`, function (err, res, body) {
-    if (err) {
-        console.error(err)
-    } else {
-        console.log(body);
-    }
+    console.log((err?err:body))
 });
  *
  * @apiSuccessExample {json} Success Response
@@ -151,13 +143,13 @@ router.route('/:id/is-published')
 /**
  * @api {post} /hackathons/:id/is-published Update Published Status
  * @apiName UpdateIsPublished
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Updates the 'Published' status for a Hackathon, indicating 'true' if it is publicly visible for applications and 'false' otherwise.
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  * @apiParam {Boolean} isPublished true if public, false otherwise.
  *
  * @apiExample {js} Example Request (JS):
@@ -185,13 +177,13 @@ router.route('/:id/is-published')
 /**
  * @api {get} /hackathons/:id/organisers Get Hackathon Organisers
  * @apiName GetHackathonOrganisers
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Retrieves all Organisers for a Hackathon
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
@@ -210,13 +202,13 @@ router.route('/:id/organisers')
 /**
  * @api {get} /hackathons/:id/volunteers Get Hackathon Volunteers
  * @apiName GetHackathonVolunteers
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Retrieves all Volunteers for a Hackathon
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
@@ -235,13 +227,13 @@ router.route('/:id/volunteers')
 /**
  * @api {get} /hackathons/:id/participants Get Hackathon Participants
  * @apiName GetHackathonParticipants
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Retrieves all Participants for a Hackathon
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
@@ -260,13 +252,13 @@ router.route('/:id/participants')
 /**
  * @api {get} /hackathons/:id/participants Get Hackathon Mentors
  * @apiName GetHackathonMentors
- * @apiGroup Hackathon
+ * @apiGroup Hackathons
  * @apiVersion 0.0.1
  * @apiDescription Retrieves all Mentors for a Hackathon
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {String} id   Hackathon Id
+ * @apiParam {Number} id   Hackathon Id
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
