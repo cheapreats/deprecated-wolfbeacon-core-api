@@ -1,6 +1,10 @@
 import HackathonService from '../services/hackathon-service';
 import UserService from '../services/user-service'
 
+/**
+ * Creating a Hackathon Controller
+ */
+
 async function createHackathonController(req, res, next) {
     try {
         const hackathonId = parseInt(req.body.id);
@@ -24,6 +28,9 @@ async function createHackathonController(req, res, next) {
     }
 }
 
+/**
+ * Getting Hackathon Details Controller
+ */
 function getHackathonDetailsController(req, res, next) {
     const hackathonId = parseInt(req.params.id);
     HackathonService.getHackathonDetails(hackathonId).then((data) => {
@@ -34,6 +41,9 @@ function getHackathonDetailsController(req, res, next) {
     });
 }
 
+/**
+ * Update Hackathon Details Controller
+ */
 function updateHackathonDetailsController(req, res, next) {
     const hackathonId = parseInt(req.body.id);
     const updatedHackathonData = req.body.data;
@@ -49,6 +59,9 @@ function updateHackathonDetailsController(req, res, next) {
     });
 }
 
+/**
+ * Get Hackathon Published Status Controller
+ */
 function getHackathonPublishedStatusController(req, res, next) {
     const hackathonId = parseInt(req.params.id);
     HackathonService.getHackathonPublishedStatus(hackathonId).then((data) => {
@@ -59,9 +72,11 @@ function getHackathonPublishedStatusController(req, res, next) {
         console.error(error);
         next(err);
     });
-
 }
 
+/**
+ * Update Hackathon Published Status Controller
+ */
 function updateHackathonPublishedStatusController(req, res, next) {
     const hackathonId = parseInt(req.body.id);
     const hackathonPublishedStatus = JSON.parse(req.body.isPublished);
