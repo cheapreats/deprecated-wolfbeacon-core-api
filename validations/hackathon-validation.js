@@ -18,7 +18,6 @@ const HackathonValidation = {
 
     updateHackathonPublishedStatusValidation: {
         body: {
-            id: Joi.number().required(),
             isPublished: Joi.boolean().strict().required()
         }
     }

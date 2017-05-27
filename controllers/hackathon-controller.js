@@ -92,10 +92,30 @@ function updateHackathonPublishedStatusController(req, res, next) {
     });
 }
 
+
+/**
+ * Get Hackathon Role(s)
+ */
+
+
+function getUsersForHackathonRoleController(role) {
+    return function(req, res, next) {
+        const hackathonId = parseInt(req.params.id);
+        HackathonService.getUsersForHackathonRole(hackathonId, role).then((roleData) => {
+            res.status(200).json(roleData)
+        }).catch((err) => {
+            console.error(err);
+            next(err);
+        });
+    };
+}
+
+
 export default {
     createHackathonController,
     getHackathonDetailsController,
     updateHackathonDetailsController,
     getHackathonPublishedStatusController,
-    updateHackathonPublishedStatusController
+    updateHackathonPublishedStatusController,
+    getUsersForHackathonRoleController
 }

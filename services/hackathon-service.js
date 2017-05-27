@@ -15,40 +15,20 @@ const HackathonService = {
     },
 
     /**
-     * Adding Users to Hackathons in different roles
+     * Get in these roles [participants/mentors/volunteers/organisers] for a Hackathon
      */
 
-
-    addUserToHackathonOrganisers(userId, hackathonId) {
-        return Hackathon.findOneAndUpdate(
+    getUsersForHackathonRole(hackathonId, role) {
+        return Hackathon.findOne(
             {hackathonId: hackathonId},
-            {$addToSet: {organisers: userId.toString()}},
-            {new: true},
+            `${role} -_id`
         ).exec();
     },
 
-    addUserToHackathonVolunteers(userId, hackathonId) {
-        return Hackathon.findOneAndUpdate(
+    getUsersForAllHackathonRole(hackathonId) {
+        return Hackathon.findOne(
             {hackathonId: hackathonId},
-            {$addToSet: {volunteers: userId.toString()}},
-            {new: true},
-        ).exec();
-    },
-
-    addUserToHackathonParticipants(userId, hackathonId) {
-        return Hackathon.findOneAndUpdate(
-            {hackathonId: hackathonId},
-            {$addToSet: {participants: userId.toString()}},
-            {new: true},
-        ).exec();
-    },
-
-
-    addUserToHackathonMentors(userId, hackathonId) {
-        return Hackathon.findOneAndUpdate(
-            {hackathonId: hackathonId},
-            {$addToSet: {mentors: userId.toString()}},
-            {new: true},
+            `organisers volunteers participants mentors -_id`
         ).exec();
     },
 

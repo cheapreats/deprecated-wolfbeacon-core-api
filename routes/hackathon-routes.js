@@ -149,7 +149,7 @@ router.route('/:id/is-published')
     .get(HackathonControllers.getHackathonPublishedStatusController);
 
 /**
- * @api {post} /hackathons/:id/is-published Update Published status
+ * @api {post} /hackathons/:id/is-published Update Published Status
  * @apiName UpdateIsPublished
  * @apiGroup Hackathon
  * @apiVersion 0.0.1
@@ -181,8 +181,105 @@ router.route('/:id/is-published')
  * {message: "Successfully updated Hackathon 712, published status updated to true" }
  *
  */
-router.route('/:id/is-published')
-    .post(validate(HackathonValidation.updateHackathonPublishedStatusValidation), HackathonControllers.updateHackathonPublishedStatusController);
 
+/**
+ * @api {get} /hackathons/:id/organisers Get Hackathon Organisers
+ * @apiName GetHackathonOrganisers
+ * @apiGroup Hackathon
+ * @apiVersion 0.0.1
+ * @apiDescription Retrieves all Organisers for a Hackathon
+ *
+ * @apiHeader {String} authorization Auth0 Access Token.
+ *
+ * @apiParam {String} id   Hackathon Id
+ *
+ * @apiExample {js} Example Request (JS):
+ var request = require('request');
+ let hackathonId = 712;
+ request.get(`http://localhost:3000/api/hackathons/${hackathonId}/organisers`, function (err, res, body) {
+    console.log((err?err:body))
+});
+ *
+ * @apiSuccessExample {json} Success Response
+ * {"organisers":["151262315"]}
+ *
+ */
+router.route('/:id/organisers')
+    .get(HackathonControllers.getUsersForHackathonRoleController('organisers'));
+
+/**
+ * @api {get} /hackathons/:id/volunteers Get Hackathon Volunteers
+ * @apiName GetHackathonVolunteers
+ * @apiGroup Hackathon
+ * @apiVersion 0.0.1
+ * @apiDescription Retrieves all Volunteers for a Hackathon
+ *
+ * @apiHeader {String} authorization Auth0 Access Token.
+ *
+ * @apiParam {String} id   Hackathon Id
+ *
+ * @apiExample {js} Example Request (JS):
+ var request = require('request');
+ let hackathonId = 712;
+ request.get(`http://localhost:3000/api/hackathons/${hackathonId}/volunteers`, function (err, res, body) {
+    console.log((err?err:body))
+});
+ *
+ * @apiSuccessExample {json} Success Response
+ * {"volunteers":["151262315"]}
+ *
+ */
+router.route('/:id/volunteers')
+    .get(HackathonControllers.getUsersForHackathonRoleController('volunteers'));
+
+/**
+ * @api {get} /hackathons/:id/participants Get Hackathon Participants
+ * @apiName GetHackathonParticipants
+ * @apiGroup Hackathon
+ * @apiVersion 0.0.1
+ * @apiDescription Retrieves all Participants for a Hackathon
+ *
+ * @apiHeader {String} authorization Auth0 Access Token.
+ *
+ * @apiParam {String} id   Hackathon Id
+ *
+ * @apiExample {js} Example Request (JS):
+ var request = require('request');
+ let hackathonId = 712;
+ request.get(`http://localhost:3000/api/hackathons/${hackathonId}/participants`, function (err, res, body) {
+    console.log((err?err:body))
+});
+ *
+ * @apiSuccessExample {json} Success Response
+ * {"participants":["151262315"]}
+ *
+ */
+router.route('/:id/participants')
+    .get(HackathonControllers.getUsersForHackathonRoleController('participants'));
+
+/**
+ * @api {get} /hackathons/:id/participants Get Hackathon Mentors
+ * @apiName GetHackathonMentors
+ * @apiGroup Hackathon
+ * @apiVersion 0.0.1
+ * @apiDescription Retrieves all Mentors for a Hackathon
+ *
+ * @apiHeader {String} authorization Auth0 Access Token.
+ *
+ * @apiParam {String} id   Hackathon Id
+ *
+ * @apiExample {js} Example Request (JS):
+ var request = require('request');
+ let hackathonId = 712;
+ request.get(`http://localhost:3000/api/hackathons/${hackathonId}/mentors`, function (err, res, body) {
+    console.log((err?err:body))
+});
+ *
+ * @apiSuccessExample {json} Success Response
+ * {"participants":["151262315"]}
+ *
+ */
+router.route('/:id/mentors')
+    .get(HackathonControllers.getUsersForHackathonRoleController('mentors'));
 
 export default router;
