@@ -14,7 +14,7 @@ async function createHackathonController(req, res, next) {
         await UserService.makeUserHackathonOrganiser(userId, hackathonId);
 
         console.log(`Hackathon ${hackathonId}, User ${userId} inserted and linked in DB`);
-        res.json({
+        res.status(200).json({
             message: `Successfully created Hackathon ${hackathonId} linked to user ${userId}`
         })
 
@@ -24,11 +24,10 @@ async function createHackathonController(req, res, next) {
     }
 }
 
-function fetchHackathonDetailsController(req, res, next) {
+function getHackathonDetailsController(req, res, next) {
     const hackathonId = parseInt(req.params.id);
-    HackathonService.fetchHackathonDetails(hackathonId).then((data) => {
-        console.log(data);
-        res.json(data.data);
+    HackathonService.getHackathonDetails(hackathonId).then((data) => {
+        res.status(200).json(data.data);
     }).catch((err) => {
         console.log(err);
         next(err);
@@ -41,8 +40,8 @@ function updateHackathonDetailsController(req, res, next) {
     HackathonService.updateHackathonDetails(hackathonId, updatedHackathonData).then((data) => {
         console.log(data);
         console.log(`Hackathon ${hackathonId} updated in system`);
-        res.json({
-            message: `Successfully updated Hackathon ${hackathonId}`
+        res.status(200).json({
+            message: `Successfully updated data for Hackathon ${hackathonId}`
         })
     }).catch((err) => {
         console.error(error);
@@ -50,4 +49,38 @@ function updateHackathonDetailsController(req, res, next) {
     });
 }
 
-export default {createHackathonController, fetchHackathonDetailsController, updateHackathonDetailsController}
+function getHackathonPublishedStatusController(req, res, next) {
+    const hackathonId = parseInt(req.params.id);
+    HackathonService.getHackathonPublishedStatus(hackathonId).then((data) => {
+        res.status(200).json({
+            isPublished: `${data.isPublished}`
+        })
+    }).catch((err) => {
+        console.error(error);
+        next(err);
+    });
+
+}
+
+function updateHackathonPublishedStatusController(req, res, next) {
+    const hackathonId = parseInt(req.body.id);
+    const hackathonPublishedStatus = JSON.parse(req.body.isPublished);
+    console.log(hackathonPublishedStatus);
+    HackathonService.updateHackathonPublishedStatus(hackathonId, hackathonPublishedStatus).then((data) => {
+        console.log(`Hackathon ${hackathonId} published status updated in system to ${hackathonPublishedStatus}`);
+        res.status(200).json({
+            message: `Successfully updated Hackathon ${hackathonId}, published status updated to ${hackathonPublishedStatus}`
+        })
+    }).catch((err) => {
+        console.error(err);
+        next(err);
+    });
+}
+
+export default {
+    createHackathonController,
+    getHackathonDetailsController,
+    updateHackathonDetailsController,
+    getHackathonPublishedStatusController,
+    updateHackathonPublishedStatusController
+}

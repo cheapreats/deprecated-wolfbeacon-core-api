@@ -4,6 +4,7 @@ const hackathonSchema = new mongoose.Schema({
     hackathonId: {type: Number, required: true},
     uuid: {type: String, required: true},
     data: {type: Object, required: true},
+    isPublished: {type: Boolean, default: false},
     organisers: [String],
     volunteers: [String],
     participants: [String],

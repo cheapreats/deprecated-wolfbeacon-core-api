@@ -14,6 +14,13 @@ const HackathonValidation = {
             id: Joi.number().required(),
             data: Joi.object().required()
         }
+    },
+
+    updateHackathonPublishedStatusValidation: {
+        body: {
+            id: Joi.number().required(),
+            isPublished: Joi.boolean().strict().required()
+        }
     }
 };
 

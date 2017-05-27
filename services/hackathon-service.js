@@ -53,25 +53,41 @@ const HackathonService = {
     },
 
     /**
-     * Fetch Hackathon Details
+     * Get and Set Hackathon Details
      */
 
-    fetchHackathonDetails(hackathonId) {
+    getHackathonDetails(hackathonId) {
         return Hackathon.findOne(
-            {hackathonId: hackathonId}
+            {hackathonId: hackathonId},
+            'data'
         ).exec();
     },
-
-    /**
-     * Update Hackathon Details
-     */
 
     updateHackathonDetails(hackathonId, updatedHackathonData) {
         return Hackathon.updateOne(
             {hackathonId: hackathonId},
             {data: updatedHackathonData}
         ).exec();
+    },
+
+    /**
+     * Get and Set Hackathon Published status
+     */
+
+    getHackathonPublishedStatus(hackathonId) {
+        return Hackathon.findOne(
+            {hackathonId: hackathonId},
+            'isPublished'
+        ).exec();
+    },
+
+    updateHackathonPublishedStatus(hackathonId, updatedPublishedStatus) {
+        return Hackathon.updateOne(
+            {hackathonId: hackathonId},
+            {isPublished: updatedPublishedStatus}
+        ).exec();
     }
+
 };
 
 
