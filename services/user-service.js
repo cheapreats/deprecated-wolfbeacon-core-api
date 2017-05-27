@@ -7,51 +7,27 @@ const UserService = {
      */
 
     upsertUser(userId) {
-        let user = new User({
-            userId: userId
-        });
-        return User.findOneAndUpdate(
-            {userId: userId},
-            user,
-            {upsert: true, new: true},
-        ).exec();
+        User.findOne(
+            {userId: userId}, function (err, res) {
+                if (res === null) {
+                    return new User({
+                        userId: userId
+                    }).save()
+                }
+            }
+        )
     },
 
     /**
      * Add Users to Hackathons in different roles
      */
 
-    makeUserHackathonOrganiser(userId, hackathonId) {
+    addHackathonRoleToUser(userId, hackathonId, role) {
         return User.findOneAndUpdate(
             {userId: userId},
-            {$addToSet: {organising: hackathonId}},
+            {$addToSet: {[role]: hackathonId}},
         ).exec();
     },
-
-
-    makeUserHackathonVolunteer(userId, hackathonId) {
-        User.findByIdAndUpdate(
-            userId,
-            {$push: {volunteering: hackathonId}},
-            {safe: true, upsert: true}
-        );
-    },
-
-    makeUserHackathonParticipant(userId, hackathonId) {
-        User.findByIdAndUpdate(
-            userId,
-            {$push: {participating: hackathonId}},
-            {safe: true, upsert: true}
-        );
-    },
-
-    makeUserHackathonMentor(userId, hackathonId) {
-        User.findByIdAndUpdate(
-            userId,
-            {$push: {mentoring: hackathonId}},
-            {safe: true, upsert: true}
-        );
-    }
 };
 
 

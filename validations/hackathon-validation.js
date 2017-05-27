@@ -20,6 +20,13 @@ const HackathonValidation = {
         body: {
             isPublished: Joi.boolean().strict().required()
         }
+    },
+
+    addUserToHackathonRoleValidation: {
+        body: {
+            userId: Joi.string().required(),
+            role: Joi.string().valid('organiser', 'volunteer', 'participant', 'mentor').required()
+        }
     }
 };
 

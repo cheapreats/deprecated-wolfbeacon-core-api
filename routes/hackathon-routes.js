@@ -4,12 +4,16 @@ import HackathonValidation from '../validations/hackathon-validation';
 import HackathonControllers from '../controllers/hackathon-controller';
 const router = express.Router();
 
+
+/* CREATING HACKATHON*/
+
+
 /**
  * @api {post} /hackathons/ Create Hackathon
- * @apiName CreateHackathon
+ * @apiName AddHackathon
  * @apiGroup Hackathons
  * @apiVersion 0.0.1
- * @apiDescription Create a Hackathon in the System
+ * @apiDescription Creates and Adds a new Hackathon into the System
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
@@ -47,6 +51,10 @@ const router = express.Router();
  */
 router.route('/')
     .post(validate(HackathonValidation.createHackathonValidation), HackathonControllers.createHackathonController);
+
+
+/* GETTING AND SETTING HACKATHON DATA*/
+
 
 /**
  * @api {get} /hackathons/:id Get Hackathon Data
@@ -115,6 +123,10 @@ router.route('/:id')
 router.route('/:id/data')
     .post(validate(HackathonValidation.updateHackathonDataValidation), HackathonControllers.updateHackathonDetailsController);
 
+
+/* GETTING AND SETTING PUBLISHED STATUS*/
+
+
 /**
  * @api {get} /hackathons/:id/is-published Get Published Status
  * @apiName GetIsPublished
@@ -150,7 +162,7 @@ router.route('/:id/is-published')
  * @apiHeader {String} authorization Auth0 Access Token.
  *
  * @apiParam {Number} id   Hackathon Id
- * @apiParam {Boolean} isPublished true if public, false otherwise.
+ * @apiParam {Boolean} isPublished <b>true</b> if public, <b>false</b> otherwise.
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
@@ -173,22 +185,26 @@ router.route('/:id/is-published')
  * {message: "Successfully updated Hackathon 712, published status updated to true" }
  *
  */
+router.route('/:id/is-published')
+    .post(validate(HackathonValidation.updateHackathonPublishedStatusValidation), HackathonControllers.updateHackathonPublishedStatusController);
+
+
+/* GETTING ROLES */
+
 
 /**
- * @api {get} /hackathons/:id/organisers Get Hackathon Organisers
- * @apiName GetHackathonOrganisers
+ * @api {get} /hackathons/:id/roles Get Hackathon Roles
+ * @apiName GetHackathonRoles
  * @apiGroup Hackathons
  * @apiVersion 0.0.1
- * @apiDescription Retrieves all Organisers for a Hackathon
+ * @apiDescription Retrieves all Roles(Organisers, Volunteers, Participants and Mentors) for a Hackathon
  *
  * @apiHeader {String} authorization Auth0 Access Token.
- *
- * @apiParam {Number} id   Hackathon Id
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
  let hackathonId = 712;
- request.get(`http://localhost:3000/api/hackathons/${hackathonId}/organisers`, function (err, res, body) {
+ request.get(`http://localhost:3000/api/hackathons/${hackathonId}/roles`, function (err, res, body) {
     console.log((err?err:body))
 });
  *
@@ -196,82 +212,44 @@ router.route('/:id/is-published')
  * {"organisers":["151262315"]}
  *
  */
-router.route('/:id/organisers')
-    .get(HackathonControllers.getUsersForHackathonRoleController('organisers'));
+router.route('/:id/roles')
+    .get(HackathonControllers.getUsersForAllHackathonRoleController);
+
+/* ADDING ROLES */
 
 /**
- * @api {get} /hackathons/:id/volunteers Get Hackathon Volunteers
- * @apiName GetHackathonVolunteers
+ * @api {post} /hackathons/:id/roles Update Hackathon Roles
+ * @apiName AddUserToHackathonRole
  * @apiGroup Hackathons
  * @apiVersion 0.0.1
- * @apiDescription Retrieves all Volunteers for a Hackathon
+ * @apiDescription Adds a User to a Hackathon Role (Organiser, Volunteer, Participant and Mentor).
  *
  * @apiHeader {String} authorization Auth0 Access Token.
  *
- * @apiParam {Number} id   Hackathon Id
+ * @apiParam {String} userId   Auth0 User Id
+ * @apiParam {String} role   Hackathon Role to assign, one of [<b>'organiser', 'volunteer', 'participant' or 'mentor'</b>]
  *
  * @apiExample {js} Example Request (JS):
  var request = require('request');
- let hackathonId = 712;
- request.get(`http://localhost:3000/api/hackathons/${hackathonId}/volunteers`, function (err, res, body) {
-    console.log((err?err:body))
-});
+ request({
+        method: 'POST',
+        url: "http://localhost:3000/api/hackathons/712/roles",
+        body: {
+            userId: "91312",
+            role: 'organiser'
+        },
+        json: true,
+        headers: {authorization: 'Bearer access-token-here'}
+    }
+ , function (error, response, body) {
+        console.log(body);
+    });
  *
  * @apiSuccessExample {json} Success Response
- * {"volunteers":["151262315"]}
+ * {message: 'Successfully added User 5123312 to Hackathon 712 as organiser' }
  *
  */
-router.route('/:id/volunteers')
-    .get(HackathonControllers.getUsersForHackathonRoleController('volunteers'));
-
-/**
- * @api {get} /hackathons/:id/participants Get Hackathon Participants
- * @apiName GetHackathonParticipants
- * @apiGroup Hackathons
- * @apiVersion 0.0.1
- * @apiDescription Retrieves all Participants for a Hackathon
- *
- * @apiHeader {String} authorization Auth0 Access Token.
- *
- * @apiParam {Number} id   Hackathon Id
- *
- * @apiExample {js} Example Request (JS):
- var request = require('request');
- let hackathonId = 712;
- request.get(`http://localhost:3000/api/hackathons/${hackathonId}/participants`, function (err, res, body) {
-    console.log((err?err:body))
-});
- *
- * @apiSuccessExample {json} Success Response
- * {"participants":["151262315"]}
- *
- */
-router.route('/:id/participants')
-    .get(HackathonControllers.getUsersForHackathonRoleController('participants'));
-
-/**
- * @api {get} /hackathons/:id/participants Get Hackathon Mentors
- * @apiName GetHackathonMentors
- * @apiGroup Hackathons
- * @apiVersion 0.0.1
- * @apiDescription Retrieves all Mentors for a Hackathon
- *
- * @apiHeader {String} authorization Auth0 Access Token.
- *
- * @apiParam {Number} id   Hackathon Id
- *
- * @apiExample {js} Example Request (JS):
- var request = require('request');
- let hackathonId = 712;
- request.get(`http://localhost:3000/api/hackathons/${hackathonId}/mentors`, function (err, res, body) {
-    console.log((err?err:body))
-});
- *
- * @apiSuccessExample {json} Success Response
- * {"participants":["151262315"]}
- *
- */
-router.route('/:id/mentors')
-    .get(HackathonControllers.getUsersForHackathonRoleController('mentors'));
+router.route('/:id/roles')
+    .post(validate(HackathonValidation.addUserToHackathonRoleValidation), HackathonControllers.assignHackathonRoleToUserController);
 
 export default router;

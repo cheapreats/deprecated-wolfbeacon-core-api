@@ -14,8 +14,8 @@ async function createHackathonController(req, res, next) {
 
         await HackathonService.createHackathon(hackathonId, hackathonUuid, hackathonData);
         await UserService.upsertUser(userId);
-        await HackathonService.addUserToHackathonOrganisers(userId, hackathonId);
-        await UserService.makeUserHackathonOrganiser(userId, hackathonId);
+        await HackathonService.addUserToHackathonRole(userId, hackathonId, 'organisers');
+        await UserService.addHackathonRoleToUser(userId, hackathonId, 'organising');
 
         console.log(`Hackathon ${hackathonId}, User ${userId} inserted and linked in DB`);
         res.status(200).json({
@@ -94,22 +94,52 @@ function updateHackathonPublishedStatusController(req, res, next) {
 
 
 /**
+ * Get All Hackathon Roles
+ */
+
+function getUsersForAllHackathonRoleController(req, res, next) {
+    const hackathonId = parseInt(req.params.id);
+    HackathonService.getUsersForAllHackathonRoles(hackathonId).then((roleData) => {
+        res.status(200).json(roleData)
+    }).catch((err) => {
+        console.error(err);
+        next(err);
+    });
+}
+
+/**
  * Get Hackathon Role(s)
  */
 
-
-function getUsersForHackathonRoleController(role) {
-    return function(req, res, next) {
+async function assignHackathonRoleToUserController(req, res, next) {
+    try {
         const hackathonId = parseInt(req.params.id);
-        HackathonService.getUsersForHackathonRole(hackathonId, role).then((roleData) => {
-            res.status(200).json(roleData)
-        }).catch((err) => {
-            console.error(err);
-            next(err);
-        });
-    };
+        const userId = req.body.userId;
+        const role = (req.body.role);
+        let hackathonRole = 'organisers', userRole = 'organising';
+        switch (role) {
+            case 'volunteer':
+                hackathonRole = 'volunteers';
+                userRole = 'volunteering';
+                break;
+            case 'participant':
+                hackathonRole = 'participants';
+                userRole = 'participating';
+                break;
+            case 'mentor':
+                hackathonRole = 'mentors';
+                userRole = 'mentoring';
+                break;
+        }
+        await UserService.upsertUser(userId);
+        await HackathonService.addUserToHackathonRole(userId, hackathonId, hackathonRole);
+        await UserService.addHackathonRoleToUser(userId, hackathonId, userRole);
+        res.status(200).json({message: `Successfully added User ${userId} to Hackathon ${hackathonId} as ${hackathonRole}`})
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
 }
-
 
 export default {
     createHackathonController,
@@ -117,5 +147,6 @@ export default {
     updateHackathonDetailsController,
     getHackathonPublishedStatusController,
     updateHackathonPublishedStatusController,
-    getUsersForHackathonRoleController
+    getUsersForAllHackathonRoleController,
+    assignHackathonRoleToUserController
 }
