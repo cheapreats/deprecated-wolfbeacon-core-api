@@ -54,7 +54,7 @@ function updateHackathonDetailsController(req, res, next) {
             message: `Successfully updated data for Hackathon ${hackathonId}`
         })
     }).catch((err) => {
-        console.error(error);
+        console.error(err);
         next(err);
     });
 }
@@ -69,7 +69,7 @@ function getHackathonPublishedStatusController(req, res, next) {
             isPublished: `${data.isPublished}`
         })
     }).catch((err) => {
-        console.error(error);
+        console.error(err);
         next(err);
     });
 }
@@ -141,6 +141,29 @@ async function assignHackathonRoleToUserController(req, res, next) {
     }
 }
 
+async function getHackathonsController(req, res, next) {
+    try {
+        let hackathonType = 'all';
+        if (req.query.type) {
+            hackathonType = req.query.type;
+        }
+        if (hackathonType === 'featured') {
+            let featuredHackathonsList = await HackathonService.getFeaturedHackathons();
+            res.status(200).json({
+                hackathonIdList: featuredHackathonsList
+            })
+        } else {
+            let allHackathonsList = await HackathonService.getAllHackathons();
+            res.status(200).json({
+                hackathonIdList: allHackathonsList
+            })
+        }
+    } catch(err) {
+        console.error(err);
+        next(err);
+    }
+}
+
 export default {
     createHackathonController,
     getHackathonDetailsController,
@@ -148,5 +171,6 @@ export default {
     getHackathonPublishedStatusController,
     updateHackathonPublishedStatusController,
     getUsersForAllHackathonRoleController,
-    assignHackathonRoleToUserController
+    assignHackathonRoleToUserController,
+    getHackathonsController
 }

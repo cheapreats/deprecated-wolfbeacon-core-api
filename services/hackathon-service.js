@@ -66,7 +66,57 @@ const HackathonService = {
             {hackathonId: hackathonId},
             {isPublished: updatedPublishedStatus}
         ).exec();
+    },
+
+    /**
+     * Get Hackathons
+     */
+    // Current Algorithm if to get if count of all people is > 500
+    async getFeaturedHackathons() {
+        let allHackathonIds = [];
+        await Hackathon.aggregate([
+            {
+                "$redact": {
+                    "$cond": {
+                        "if": {
+                            "$gt": [
+                                {
+                                    "$size": {
+                                        "$concatArrays": [
+                                            "$organisers",
+                                            "$volunteers",
+                                            "$participants",
+                                            "$mentors"
+                                        ]
+                                    }
+                                },
+                                500
+                            ]
+                        },
+                        "then": "$$KEEP",
+                        "else": "$$PRUNE"
+                    }
+                }
+            },
+            {"$project": {_id: 0, "id": "$hackathonId"}}
+        ]).then((data) => {
+            data.forEach(function(curr) {
+                allHackathonIds.push(curr['hackathonId']);
+            });
+        });
+        return allHackathonIds;
+    },
+
+    async getAllHackathons() {
+        let featuredHackathonIds = [];
+        await Hackathon.find({}, '-_id hackathonId').then((data) => {
+            data.forEach(function(curr) {
+                featuredHackathonIds.push(curr['hackathonId']);
+            });
+        });
+        return featuredHackathonIds;
     }
+
 
 };
 

@@ -27,6 +27,12 @@ const HackathonValidation = {
             userId: Joi.string().required(),
             role: Joi.string().valid('organiser', 'volunteer', 'participant', 'mentor').required()
         }
+    },
+
+    getHackathonsValidation: {
+        query: {
+            type: Joi.string().valid('featured', 'all')
+        }
     }
 };
 

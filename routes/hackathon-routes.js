@@ -5,7 +5,7 @@ import HackathonControllers from '../controllers/hackathon-controller';
 const router = express.Router();
 
 
-/* CREATING HACKATHON*/
+/* CREATING AND GETTING HACKATHON*/
 
 
 /**
@@ -45,16 +45,44 @@ const router = express.Router();
     });
  *
  * @apiSuccessExample {json} Success Response
- * { status: 'SUCCESS',
-  message: 'Successfully created Hackathon 712 linked to user 151262315' }
- *
+ * HTTP/1.1 200 OK
+ * {message: 'Successfully created Hackathon 712 linked to user 151262315'}
  */
 router.route('/')
     .post(validate(HackathonValidation.createHackathonValidation), HackathonControllers.createHackathonController);
 
 
-/* GETTING AND SETTING HACKATHON DATA*/
 
+/**
+ * @api {get} /hackathons/ Get Hackathons
+ * @apiName GetHackathons
+ * @apiGroup Hackathons
+ * @apiVersion 0.0.1
+ * @apiDescription Retrieve all Hackathons, optionally for a particular type. Types currently supported are [<b>all</b>(default),
+ * <b>featured</b>]. Simply calling the endpoint without any query params will yield all Hackathons in the system. This call
+ * returns a JSON List named <i>hackathonIdList</i> containing Hackathon Ids for the type(all, featured, etc) of Hackathon queried.
+ *
+ * @apiHeader {String} authorization Auth0 Access Token.
+ *
+ * @apiParam {String} type Optional Parameter for Hackathon Type(<b>featured</b> gets all featured Hackathons)
+ * @apiExample {js} Example Request (JS):
+ var request = require('request');
+
+ let hackathonId = 712;
+
+ request.get('http://localhost:3000/api/hackathons?type=featured', function (err, res, body) {
+    console.log((err?err:body))
+});
+ *
+ * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
+ * {"hackathonIdList":[712,312,192,2]}
+ *
+ */
+router.route('/?')
+    .get(validate(HackathonValidation.getHackathonsValidation), HackathonControllers.getHackathonsController);
+
+/* GETTING AND SETTING HACKATHON DATA*/
 
 /**
  * @api {get} /hackathons/:id Get Hackathon Data
@@ -76,9 +104,9 @@ router.route('/')
 });
  *
  * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
  * {"exampleHackathonData":{"Name":"Hack The Valley"}}
  *
-
  */
 router.route('/:id')
     .get(HackathonControllers.getHackathonDetailsController);
@@ -105,7 +133,7 @@ router.route('/:id')
             data: {
                 "exampleHackathonData": {
                     "Name": "Hack The Valley"
-                    "Organizer" : "Ralphie the cool buoy"
+                    "Organizer" : "Ralph Maamari"
                 }
             }
         },
@@ -117,6 +145,7 @@ router.route('/:id')
     });
  *
  * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
  * {message: 'Successfully updated data for Hackathon 712' }
  *
  */
@@ -146,6 +175,7 @@ router.route('/:id/data')
 });
  *
  * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
  * {"isPublished":"false"}
  *
  */
@@ -182,6 +212,7 @@ router.route('/:id/is-published')
     });
  *
  * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
  * {message: "Successfully updated Hackathon 712, published status updated to true" }
  *
  */
@@ -209,6 +240,7 @@ router.route('/:id/is-published')
 });
  *
  * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
  * {"organisers":["151262315"]}
  *
  */
@@ -246,6 +278,7 @@ router.route('/:id/roles')
     });
  *
  * @apiSuccessExample {json} Success Response
+ * HTTP/1.1 200 OK
  * {message: 'Successfully added User 5123312 to Hackathon 712 as organiser' }
  *
  */
